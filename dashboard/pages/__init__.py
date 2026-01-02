@@ -1,0 +1,2 @@
+"""Pages du dashboard."""
+

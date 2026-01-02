@@ -1,0 +1,105 @@
+"""
+Utility functions for the house price prediction project.
+"""
+
+import pandas as pd
+import numpy as np
+from pathlib import Path
+from typing import Tuple
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+def prepare_data(train_df: pd.DataFrame, test_df: pd.DataFrame, 
+                target_col: str = 'SalePrice') -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
+    """
+    Prepare data for modeling by separating features and target.
+    
+    Args:
+        train_df: Training DataFrame
+        test_df: Test DataFrame
+        target_col: Name of target column
+        
+    Returns:
+        Tuple of (X_train, y_train, X_test)
+    """
+    # Separate target from features
+    if target_col in train_df.columns:
+        y_train = train_df[target_col]
+        X_train = train_df.drop(columns=[target_col])
+    else:
+        raise ValueError(f"Target column '{target_col}' not found in training data")
+    
+    # Test data (no target)
+    X_test = test_df.copy()
+    
+    # Align columns
+    common_cols = [col for col in X_train.columns if col in X_test.columns]
+    X_train = X_train[common_cols]
+    X_test = X_test[common_cols]
+    
+    logger.info(f"Prepared data: X_train shape {X_train.shape}, X_test shape {X_test.shape}")
+    
+    return X_train, y_train, X_test
+
+
+def create_submission(predictions: np.ndarray, test_ids: pd.Series, 
+                     output_path: str = "output/submission.csv"):
+    """
+    Create submission file in the required format.
+    
+    Args:
+        predictions: Model predictions
+        test_ids: Test set IDs
+        output_path: Path to save submission file
+    """
+    submission = pd.DataFrame({
+        'Id': test_ids,
+        'SalePrice': predictions
+    })
+    
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    submission.to_csv(output_path, index=False)
+    logger.info(f"Submission file saved to {output_path}")
+
+
+def calculate_rmse(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    """
+    Calculate Root Mean Squared Error.
+    
+    Args:
+        y_true: True values
+        y_pred: Predicted values
+        
+    Returns:
+        RMSE value
+    """
+    return np.sqrt(np.mean((y_true - y_pred) ** 2))
+
+
+def get_feature_importance(model: Any, feature_names: list, top_n: int = 20) -> pd.DataFrame:
+    """
+    Get feature importance from a model.
+    
+    Args:
+        model: Trained model with feature_importances_ attribute
+        feature_names: List of feature names
+        top_n: Number of top features to return
+        
+    Returns:
+        DataFrame with feature importance
+    """
+    if hasattr(model, 'feature_importances_'):
+        importance_df = pd.DataFrame({
+            'feature': feature_names,
+            'importance': model.feature_importances_
+        }).sort_values('importance', ascending=False)
+        
+        return importance_df.head(top_n)
+    else:
+        logger.warning("Model does not have feature_importances_ attribute")
+        return pd.DataFrame()
+
+
