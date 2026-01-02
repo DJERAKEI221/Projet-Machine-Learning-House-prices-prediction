@@ -5,8 +5,6 @@
 Ce projet est réalisé dans le cadre du cours de Machine Learning I dispensé aux Élèves Ingénieurs Statisticiens Économistes (ISE-2) à l'École nationale de la Statistique et de l'Analyse économique Pierre NDIAYE (ENSAE).
 
 
-Pour plus de détails, voir [`docs/GESTION_VALEURS_MANQUANTES_OUTLIERS.md`](docs/GESTION_VALEURS_MANQUANTES_OUTLIERS.md).
-
 ## Contribution
 
 Ce projet est réalisé dans le cadre académique. Pour toute question ou suggestion, veuillez ouvrir une issue sur le repository.
