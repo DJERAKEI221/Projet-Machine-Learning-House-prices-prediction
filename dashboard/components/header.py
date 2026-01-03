@@ -71,6 +71,18 @@ def create_header():
             dbc.NavItem(
                 dbc.NavLink(
                     [
+                        html.I(className="fas fa-chart-line me-2"),
+                        html.Span("Dashboard")
+                    ],
+                    id="nav-dashboard",
+                    n_clicks=0,
+                    href="#",
+                    className="nav-link-custom"
+                )
+            ),
+            dbc.NavItem(
+                dbc.NavLink(
+                    [
                         html.I(className="fas fa-calculator me-2"),
                         html.Span("Prédiction")
                     ],

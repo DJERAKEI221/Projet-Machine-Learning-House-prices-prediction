@@ -72,7 +72,7 @@ Le dashboard utilise :
 
 ```bash
 # Méthode 1 : Via le script
-python app_dash.py
+python dashboard/app.py
 
 # Méthode 2 : Via le module
 python -m dashboard.app
