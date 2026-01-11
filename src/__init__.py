@@ -1,8 +1,4 @@
 """
-House Price Prediction Project
-Laplace Immo - Machine Learning Project
+Module source du projet de prédiction des prix immobiliers.
 """
-
-__version__ = "1.0.0"
-
 

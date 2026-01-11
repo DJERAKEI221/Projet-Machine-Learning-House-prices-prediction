@@ -1,205 +1,189 @@
 """
-Feature engineering module for house price prediction.
-Creates new features and transforms existing ones.
+Module de feature engineering pour le projet de prédiction des prix immobiliers.
 """
 
 import pandas as pd
 import numpy as np
-from typing import List
+from scipy import stats
+from sklearn.preprocessing import LabelEncoder
 import logging
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 class FeatureEngineer:
-    """Class for feature engineering operations."""
+    """
+    Classe pour effectuer le feature engineering sur les données immobilières.
+    """
     
     def __init__(self):
-        """Initialize FeatureEngineer."""
-        pass
+        """Initialiser le FeatureEngineer."""
+        self.label_encoders = {}
+        self.skewed_features = []
     
-    def create_features(self, df: pd.DataFrame) -> pd.DataFrame:
+    def create_features(self, df):
         """
-        Create new features from existing ones.
+        Créer de nouvelles features à partir des features existantes.
         
         Args:
-            df: DataFrame to process
+            df: DataFrame avec les données
             
         Returns:
-            DataFrame with new features added
+            DataFrame avec les nouvelles features ajoutées
         """
         df = df.copy()
         
-        logger.info("Creating new features...")
+        # Features de surface totale
+        if 'TotalBsmtSF' in df.columns and '1stFlrSF' in df.columns and '2ndFlrSF' in df.columns:
+            df['TotalSF'] = df['TotalBsmtSF'] + df['1stFlrSF'] + df.get('2ndFlrSF', 0)
         
-        # Total square footage
-        if all(col in df.columns for col in ['TotalBsmtSF', '1stFlrSF', '2ndFlrSF']):
-            df['TotalSF'] = df['TotalBsmtSF'] + df['1stFlrSF'] + df['2ndFlrSF']
+        # Features de salles de bain totales
+        bath_cols = ['FullBath', 'HalfBath', 'BsmtFullBath', 'BsmtHalfBath']
+        existing_bath_cols = [col for col in bath_cols if col in df.columns]
+        if existing_bath_cols:
+            df['TotalBathrooms'] = df[existing_bath_cols].sum(axis=1)
         
-        # Total bathrooms
-        if all(col in df.columns for col in ['FullBath', 'HalfBath', 'BsmtFullBath', 'BsmtHalfBath']):
-            df['TotalBathrooms'] = df['FullBath'] + 0.5 * df['HalfBath'] + \
-                                   df['BsmtFullBath'] + 0.5 * df['BsmtHalfBath']
-        
-        # Total porch area
-        porch_cols = ['WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', 
-                     '3SsnPorch', 'ScreenPorch']
-        existing_porch = [col for col in porch_cols if col in df.columns]
-        if existing_porch:
-            df['TotalPorchSF'] = df[existing_porch].sum(axis=1)
-        
-        # House age and renovation
+        # Features d'âge
         if 'YrSold' in df.columns and 'YearBuilt' in df.columns:
             df['HouseAge'] = df['YrSold'] - df['YearBuilt']
-            df['HouseAge'] = df['HouseAge'].apply(lambda x: 0 if x < 0 else x)
         
         if 'YrSold' in df.columns and 'YearRemodAdd' in df.columns:
             df['RemodAge'] = df['YrSold'] - df['YearRemodAdd']
             df['RemodAge'] = df['RemodAge'].apply(lambda x: 0 if x < 0 else x)
-            df['IsRemod'] = (df['YearRemodAdd'] != df['YearBuilt']).astype(int)
         
-        # Garage age
         if 'YrSold' in df.columns and 'GarageYrBlt' in df.columns:
             df['GarageAge'] = df['YrSold'] - df['GarageYrBlt']
             df['GarageAge'] = df['GarageAge'].apply(lambda x: 0 if x < 0 or pd.isna(x) else x)
         
-        # Quality and condition scores
+        # Features de qualité totale
         if 'OverallQual' in df.columns and 'OverallCond' in df.columns:
-            df['QualityScore'] = df['OverallQual'] * df['OverallCond']
+            df['OverallScore'] = df['OverallQual'] + df['OverallCond']
         
-        # Has basement
-        if 'TotalBsmtSF' in df.columns:
-            df['HasBasement'] = (df['TotalBsmtSF'] > 0).astype(int)
+        # Features de surface par pièce
+        if 'GrLivArea' in df.columns and 'TotRmsAbvGrd' in df.columns:
+            df['SFPerRoom'] = df['GrLivArea'] / df['TotRmsAbvGrd'].replace(0, 1)
         
-        # Has garage
-        if 'GarageArea' in df.columns:
-            df['HasGarage'] = (df['GarageArea'] > 0).astype(int)
+        # Features de garage
+        if 'GarageArea' in df.columns and 'GarageCars' in df.columns:
+            df['GarageAreaPerCar'] = df['GarageArea'] / df['GarageCars'].replace(0, 1)
         
-        # Has fireplace
-        if 'Fireplaces' in df.columns:
-            df['HasFireplace'] = (df['Fireplaces'] > 0).astype(int)
+        # Features de lot
+        if 'LotArea' in df.columns and 'GrLivArea' in df.columns:
+            df['LotAreaPerSF'] = df['LotArea'] / df['GrLivArea'].replace(0, 1)
         
-        # Has pool
+        # Features de porche total
+        porch_cols = ['WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch']
+        existing_porch_cols = [col for col in porch_cols if col in df.columns]
+        if existing_porch_cols:
+            df['TotalPorchSF'] = df[existing_porch_cols].sum(axis=1)
+        
+        # Features booléennes
         if 'PoolArea' in df.columns:
             df['HasPool'] = (df['PoolArea'] > 0).astype(int)
         
-        # Lot features
-        if 'LotFrontage' in df.columns and 'LotArea' in df.columns:
-            df['LotRatio'] = df['LotFrontage'] / df['LotArea']
-            df['LotRatio'] = df['LotRatio'].fillna(0)
+        if 'Fireplaces' in df.columns:
+            df['HasFireplace'] = (df['Fireplaces'] > 0).astype(int)
         
-        # Living area ratio
-        if 'GrLivArea' in df.columns and 'LotArea' in df.columns:
-            df['LivAreaRatio'] = df['GrLivArea'] / df['LotArea']
-            df['LivAreaRatio'] = df['LivAreaRatio'].replace([np.inf, -np.inf], 0)
+        if 'TotalBsmtSF' in df.columns:
+            df['HasBsmt'] = (df['TotalBsmtSF'] > 0).astype(int)
         
-        # Room density
-        if 'TotRmsAbvGrd' in df.columns and 'GrLivArea' in df.columns:
-            df['RoomDensity'] = df['TotRmsAbvGrd'] / df['GrLivArea']
-            df['RoomDensity'] = df['RoomDensity'].replace([np.inf, -np.inf], 0)
+        if 'GarageArea' in df.columns:
+            df['HasGarage'] = (df['GarageArea'] > 0).astype(int)
         
-        logger.info(f"Created {len([col for col in df.columns if col not in df.columns])} new features")
+        if 'MasVnrArea' in df.columns:
+            df['HasMasVnr'] = (df['MasVnrArea'] > 0).astype(int)
+        
+        logger.info(f"Features créées. Nouveau nombre de colonnes: {df.shape[1]}")
         
         return df
     
-    def encode_categorical(self, df: pd.DataFrame, categorical_cols: List[str], 
-                          encoding_type: str = 'ordinal') -> pd.DataFrame:
+    def encode_categorical(self, df, categorical_cols, encoding_type='ordinal'):
         """
-        Encode categorical variables.
+        Encoder les variables catégorielles.
         
         Args:
-            df: DataFrame to process
-            categorical_cols: List of categorical column names
-            encoding_type: Type of encoding ('ordinal', 'onehot', 'target')
+            df: DataFrame avec les données
+            categorical_cols: Liste des colonnes catégorielles à encoder
+            encoding_type: Type d'encodage ('ordinal' ou 'label')
             
         Returns:
-            DataFrame with encoded categorical variables
+            DataFrame avec les colonnes catégorielles encodées
         """
         df = df.copy()
         
-        logger.info(f"Encoding {len(categorical_cols)} categorical variables using {encoding_type} encoding")
+        # Mapping pour l'encodage ordinal des variables de qualité
+        quality_mapping = {
+            'Ex': 5, 'Gd': 4, 'TA': 3, 'Fa': 2, 'Po': 1, 'None': 0
+        }
         
-        if encoding_type == 'ordinal':
-            # Ordinal encoding for quality/condition variables
-            quality_map = {'None': 0, 'Po': 1, 'Fa': 2, 'TA': 3, 'Gd': 4, 'Ex': 5}
-            quality_cols = ['ExterQual', 'ExterCond', 'BsmtQual', 'BsmtCond',
-                           'HeatingQC', 'KitchenQual', 'FireplaceQu', 'GarageQual', 'GarageCond', 'PoolQC']
-            
-            for col in quality_cols:
-                if col in df.columns and col in categorical_cols:
-                    df[col] = df[col].map(quality_map).fillna(0)
-            
-            # Other ordinal mappings
-            if 'BsmtExposure' in df.columns and 'BsmtExposure' in categorical_cols:
-                exposure_map = {'None': 0, 'No': 1, 'Mn': 2, 'Av': 3, 'Gd': 4}
-                df['BsmtExposure'] = df['BsmtExposure'].map(exposure_map).fillna(0)
-            
-            if 'BsmtFinType1' in df.columns and 'BsmtFinType1' in categorical_cols:
-                fin_type_map = {'None': 0, 'Unf': 1, 'LwQ': 2, 'Rec': 3, 'BLQ': 4, 'ALQ': 5, 'GLQ': 6}
-                df['BsmtFinType1'] = df['BsmtFinType1'].map(fin_type_map).fillna(0)
-                if 'BsmtFinType2' in df.columns:
-                    df['BsmtFinType2'] = df['BsmtFinType2'].map(fin_type_map).fillna(0)
-            
-            if 'GarageFinish' in df.columns and 'GarageFinish' in categorical_cols:
-                garage_finish_map = {'None': 0, 'Unf': 1, 'RFn': 2, 'Fin': 3}
-                df['GarageFinish'] = df['GarageFinish'].map(garage_finish_map).fillna(0)
-            
-            if 'Fence' in df.columns and 'Fence' in categorical_cols:
-                fence_map = {'None': 0, 'MnWw': 1, 'GdWo': 2, 'MnPrv': 3, 'GdPrv': 4}
-                df['Fence'] = df['Fence'].map(fence_map).fillna(0)
-            
-            if 'PavedDrive' in df.columns and 'PavedDrive' in categorical_cols:
-                paved_map = {'N': 0, 'P': 1, 'Y': 2}
-                df['PavedDrive'] = df['PavedDrive'].map(paved_map).fillna(0)
-            
-            if 'Functional' in df.columns and 'Functional' in categorical_cols:
-                functional_map = {'Sal': 0, 'Sev': 1, 'Maj2': 2, 'Maj1': 3, 
-                                'Mod': 4, 'Min2': 5, 'Min1': 6, 'Typ': 7}
-                df['Functional'] = df['Functional'].map(functional_map).fillna(7)
+        # Variables de qualité
+        quality_vars = ['ExterQual', 'ExterCond', 'BsmtQual', 'BsmtCond', 
+                       'HeatingQC', 'KitchenQual', 'FireplaceQu', 
+                       'GarageQual', 'GarageCond', 'PoolQC']
         
-        elif encoding_type == 'onehot':
-            # One-hot encoding for remaining categorical variables
-            remaining_cats = [col for col in categorical_cols 
-                            if col in df.columns and df[col].dtype == 'object']
-            df = pd.get_dummies(df, columns=remaining_cats, prefix=remaining_cats)
+        for col in categorical_cols:
+            if col not in df.columns:
+                continue
+            
+            if encoding_type == 'ordinal' and col in quality_vars:
+                # Encodage ordinal pour les variables de qualité
+                df[col] = df[col].map(quality_mapping).fillna(0)
+            else:
+                # Encodage label pour les autres variables catégorielles
+                if col not in self.label_encoders:
+                    le = LabelEncoder()
+                    # Gérer les valeurs manquantes et nouvelles
+                    unique_values = df[col].dropna().unique()
+                    le.fit(unique_values)
+                    self.label_encoders[col] = le
+                else:
+                    le = self.label_encoders[col]
+                
+                # Encoder, en gérant les nouvelles valeurs
+                mask = df[col].notna()
+                df.loc[mask, col] = le.transform(df.loc[mask, col])
+                df[col] = pd.to_numeric(df[col], errors='coerce').fillna(-1)
         
-        logger.info("Categorical encoding completed")
+        logger.info(f"Variables catégorielles encodées: {len(categorical_cols)}")
         
         return df
     
-    def transform_skewed_features(self, df: pd.DataFrame, numeric_cols: List[str], 
-                                  threshold: float = 0.75) -> pd.DataFrame:
+    def transform_skewed_features(self, df, numeric_cols, threshold=0.75):
         """
-        Apply log transformation to skewed numeric features.
+        Transformer les features numériques asymétriques avec log1p.
         
         Args:
-            df: DataFrame to process
-            numeric_cols: List of numeric column names
-            threshold: Skewness threshold for transformation
+            df: DataFrame avec les données
+            numeric_cols: Liste des colonnes numériques à vérifier
+            threshold: Seuil de skewness pour appliquer la transformation
             
         Returns:
-            DataFrame with transformed features
+            DataFrame avec les features transformées
         """
         df = df.copy()
         
-        logger.info("Transforming skewed features...")
+        # Exclure certaines colonnes de la transformation
+        exclude_cols = ['Id', 'SalePrice', 'YrSold', 'YearBuilt', 'YearRemodAdd', 'GarageYrBlt', 'MoSold']
         
-        # Exclude target and ID columns
-        exclude_cols = ['Id', 'SalePrice']
-        numeric_cols = [col for col in numeric_cols if col not in exclude_cols]
-        
-        skewed_cols = []
         for col in numeric_cols:
-            if col in df.columns:
-                skewness = df[col].skew()
-                if abs(skewness) > threshold:
-                    skewed_cols.append(col)
-                    # Add 1 to handle zeros
+            if col not in df.columns or col in exclude_cols:
+                continue
+            
+            # Vérifier si la colonne a des valeurs négatives ou nulles
+            if df[col].min() <= 0:
+                # Utiliser log1p pour gérer les zéros
+                if abs(df[col].skew()) > threshold:
                     df[col] = np.log1p(df[col])
+                    self.skewed_features.append(col)
+                    logger.debug(f"Feature {col} transformée (skewness: {df[col].skew():.3f})")
+            else:
+                # Utiliser log pour les valeurs strictement positives
+                if abs(df[col].skew()) > threshold:
+                    df[col] = np.log(df[col])
+                    self.skewed_features.append(col)
+                    logger.debug(f"Feature {col} transformée (skewness: {df[col].skew():.3f})")
         
-        logger.info(f"Transformed {len(skewed_cols)} skewed features")
+        logger.info(f"Features transformées: {len(self.skewed_features)}")
         
         return df
-
 

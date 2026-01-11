@@ -40,10 +40,8 @@ data/raw/*.zip
 !data/raw/.gitkeep
 
 # Output
-output/models/*.pkl
-output/submission.csv
-output/figures/*.png
-output/tables/*.csv
+# Les fichiers de sortie sont maintenant versionnés dans GitHub
+# Tous les fichiers dans output/ seront inclus dans le dépôt
 
 # IDE
 .vscode/

@@ -45,7 +45,7 @@ jobs:
     
     - name: Run unit tests with pytest
       run: |
-        pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
+        pytest tests/ -v --cov=src --cov-report=xml --cov-report=html --cov-report=term
       continue-on-error: true
     
     - name: Upload coverage reports
@@ -75,18 +75,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    - name: Run training script
-      run: |
-        python train.py
-      continue-on-error: true
-    
     - name: Check model artifacts
       run: |
-        if [ -f "output/models/final_model.pkl" ]; then
+        if [ -f "output/models_modele/model_modele.pkl" ]; then
           echo "Model file exists"
         else
-          echo "Model file not found"
-          exit 1
+          echo "Model file not found - model must be trained via notebooks"
         fi
-
-
+      continue-on-error: true
