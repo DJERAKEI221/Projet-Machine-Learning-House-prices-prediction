@@ -37,106 +37,35 @@ Le projet comprend une pipeline complète de machine learning, allant de l'explo
 
 ```
 ProjetMachine-Learning-House-prices-prediction/
-│
-├── .github/                          # Configuration GitHub Actions
-│   └── workflows/
-│       └── ci.yml                    # Pipeline CI/CD
-│
-├── dashboard/                        # Application Dash interactive
-│   ├── __init__.py
-│   ├── app.py                        # Application principale
-│   ├── components/                   # Composants réutilisables
-│   │   ├── charts.py                # Graphiques Plotly
-│   │   ├── header.py                # En-tête du dashboard
-│   │   ├── prediction_form.py       # Formulaire de prédiction
-│   │   └── sidebar.py               # Barre latérale
-│   ├── pages/                        # Pages du dashboard
-│   │   ├── dashboard.py             # Page principale
-│   │   ├── explainability.py        # Explicabilité SHAP
-│   │   ├── prediction.py            # Prédictions interactives
-│   │   ├── recommendations.py       # Recommandations
-│   │   └── sensitivity.py           # Analyse de sensibilité
-│   ├── utils/                        # Utilitaires
-│   │   ├── data_loader.py           # Chargement des données
-│   │   └── model_loader.py          # Chargement du modèle
-│   ├── assets/                       # Ressources statiques
-│   │   └── style.css                # Styles CSS
-│   ├── images/                       # Images
-│   │   └── logo_immo.png
-│   └── README.md                     # Documentation du dashboard
-│
-├── data/                             # Données du projet
-│   ├── raw/                          # Données brutes
-│   │   ├── train.csv                 # Données d'entraînement
-│   │   ├── test.csv                  # Données de test
-│   │   ├── data_description.txt      # Description des variables
-│   │   └── sample_submission.csv     # Format de soumission
-│   ├── interim/                      # Données intermédiaires
-│   └── processed/                    # Données traitées
-│       ├── train_cleaned.csv         # Données nettoyées
-│       ├── train_outliers_treated.csv # Données après traitement outliers
-│       ├── train_features.csv        # Données avec features
-│       ├── train_final.csv           # Données finales
-│       └── test_*.csv                # Versions traitées des données de test
-│
-├── docs/                             # Documentation détaillée
-│   ├── GESTION_VALEURS_MANQUANTES_OUTLIERS.md # Gestion des outliers
-│   ├── SELECTION_VARIABLES_MODELE.md # Sélection des variables
-│   ├── TRANSFORMATION_LOGARITHMIQUE.md # Transformation logarithmique
-│   └── *.docx, *.pdf                 # Documents additionnels
-│
-├── lambda/                           # Déploiement AWS Lambda
-│   ├── lambda_function.py            # Fonction Lambda principale
-│   ├── requirements.txt              # Dépendances Lambda
-│   └── README.md                     # Documentation Lambda
-│
-├── notebooks/                        # Notebooks Jupyter
-│   ├── exploration_base_donnees.ipynb # Exploration des données
-│   ├── feature_engineering.ipynb     # Feature engineering
-│   ├── modeling_modele.ipynb         # Entraînement du modèle
-│   ├── explainability.ipynb          # Analyse d'explicabilité
-│   └── sensitivity_analysis.ipynb    # Analyse de sensibilité
-│
-├── output/                           # Résultats et sorties
-│   ├── figures/                      # Graphiques générés
-│   │   ├── *.png                     # Visualisations diverses
-│   │   └── ...
-│   ├── models_modele/                # Modèles entraînés
-│   │   ├── model_modele.pkl          # Modèle sauvegardé
-│   │   ├── submission_modele.csv     # Prédictions sur test
-│   │   ├── model_comparison_modele.csv # Comparaison des modèles
-│   │   └── final_metrics_modele.txt  # Métriques finales
-│   └── tables/                       # Tableaux générés
-│       └── *.csv                     # Tableaux d'analyse
-│
-├── scripts/                          # Scripts utilitaires
-│   ├── check_pep8.py                 # Vérification PEP 8
-│   ├── format_code.py                # Formatage du code
-│   ├── integrate_mlflow.py           # Intégration MLFlow
-│   └── run_mlflow_ui.py              # Lancement MLFlow UI
-│
-├── src/                              # Code source Python
-│   ├── __init__.py
-│   └── feature_engineering.py        # Classe FeatureEngineer
-│
-├── tests/                            # Tests unitaires
-│   ├── __init__.py
-│   ├── test_data_processing.py       # Tests data processing
-│   ├── test_feature_engineering.py   # Tests feature engineering
-│   ├── test_modeling.py              # Tests modeling
-│   └── test_utils.py                 # Tests utilitaires
-│
-├── .flake8                           # Configuration flake8
-├── .gitignore                        # Fichiers ignorés par Git
-├── config.py                         # Configuration du projet
-├── pytest.ini                        # Configuration pytest
-├── pyproject.toml                    # Configuration du projet (Black, etc.)
-├── README.md                         # Ce fichier
-├── README_CI_CD.md                   # Documentation CI/CD
-├── README_MLFLOW.md                  # Documentation MLFlow
-├── requirements.txt                  # Dépendances principales
-├── requirements_api.txt              # Dépendances API/Dashboard
-└── setup.py                          # Configuration setuptools
+├── dashboard/                # App Dash (app.py, components/, pages/, utils/, assets/)
+├── data/
+│   ├── raw/                  # Données brutes (ex: data_description.txt)
+│   ├── processed/            # Données nettoyées / features
+│   └── interim/
+├── docs/                     # Docs et analyses (MD, PDF, DOCX)
+├── notebooks/
+│   ├── api_fastapi.ipynb     # API FastAPI légère pour l'inférence
+│   ├── exploration_base_donnees.ipynb
+│   ├── feature_engineering.ipynb
+│   ├── traitement.ipynb
+│   ├── data/processed/*.csv  # Exports intermédiaires depuis notebooks
+│   └── output/*.joblib       # Modèles/artefacts sauvegardés
+├── scripts/
+│   ├── integrate_mlflow.py   # Helpers MLflow (tracking local)
+│   ├── run_mlflow_ui.py      # Lancement de l'UI MLflow (http://localhost:5000)
+│   ├── save_final_model.py   # Sauvegarde du modèle final
+│   ├── check_pep8.py / format_code.py
+│   └── autres utilitaires (fix_*.py, replace_r_squared.py)
+├── src/
+│   └── feature_engineering.py
+├── output/
+│   ├── figures/*.png         # Graphiques générés
+│   ├── models_modele/        # (répertoire prévu pour modèles)
+│   └── tables/*.csv
+├── mlruns/                   # Stockage local MLflow (expériences)
+├── tests/                    # Tests unitaires (pytest)
+├── config.py, pyproject.toml, requirements*.txt, setup.py, README_*.md
+└── README.md (ce fichier)
 ```
 
 ## Installation
@@ -228,10 +157,17 @@ python dashboard/app.py
 
 ```bash
 # Lancer l'interface MLFlow
+pip install mlflow           # si non installé (depuis le même environnement que Jupyter)
 python scripts/run_mlflow_ui.py
 
 # Accéder à l'interface
 # http://localhost:5000
+```
+
+Dans un notebook Jupyter, installez-le avec la magie pour le kernel actif :
+
+```python
+%pip install mlflow
 ```
 
 ### 6. Tests Unitaires
@@ -348,14 +284,6 @@ Scripts utilitaires pour le développement :
 - `format_code.py` : Formatage automatique du code avec Black
 - `integrate_mlflow.py` : Utilitaires pour intégrer MLFlow dans les notebooks
 - `run_mlflow_ui.py` : Lancement de l'interface MLFlow UI
-
-### Déploiement (`lambda/`)
-
-Configuration pour le déploiement serverless sur AWS Lambda :
-
-- `lambda_function.py` : Code de la fonction Lambda
-- `requirements.txt` : Dépendances minimales pour Lambda
-- `README.md` : Documentation du déploiement
 
 ## Fonctionnalités Principales
 

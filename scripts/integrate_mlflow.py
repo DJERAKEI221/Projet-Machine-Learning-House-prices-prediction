@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 """
-Script utilitaire pour intégrer MLFlow dans les notebooks.
-Ce script peut être utilisé pour tracker les expériences MLFlow.
+Utilitaires MLflow pour le projet House Prices.
+Objectifs :
+- Centraliser la configuration du tracking (URI locale file://.../mlruns)
+- Simplifier la création d'une expérience
+- Fournir un helper pour logger params, métriques, tags, modèle et artefacts
 """
+
+import sys
+from pathlib import Path
+from typing import Dict, Optional
 
 import mlflow
 import mlflow.sklearn
-from pathlib import Path
-import sys
 
 # Chemin racine du projet
 project_root = Path(__file__).parent.parent
@@ -16,19 +21,14 @@ mlruns_dir = project_root / "mlruns"
 # Créer le dossier mlruns s'il n'existe pas
 mlruns_dir.mkdir(parents=True, exist_ok=True)
 
-# Configurer MLFlow
+# Configurer MLflow (tracking local)
 mlflow.set_tracking_uri(f"file://{mlruns_dir.absolute()}")
 
 
-def setup_mlflow_experiment(experiment_name="house-price-prediction"):
+def setup_mlflow_experiment(experiment_name: str = "house-price-prediction") -> Optional[str]:
     """
-    Configurer une expérience MLFlow.
-    
-    Args:
-        experiment_name: Nom de l'expérience
-        
-    Returns:
-        experiment_id: ID de l'expérience
+    Crée (si besoin) et active une expérience MLflow.
+    Retourne l'ID de l'expérience ou None en cas d'erreur.
     """
     try:
         experiment = mlflow.get_experiment_by_name(experiment_name)
@@ -42,44 +42,47 @@ def setup_mlflow_experiment(experiment_name="house-price-prediction"):
         mlflow.set_experiment(experiment_name)
         return experiment_id
     except Exception as e:
-        print(f"Erreur lors de la configuration de MLFlow: {e}")
+        print(f"Erreur lors de la configuration de MLflow: {e}")
         return None
 
 
-def log_model_metrics(metrics_dict, params_dict=None, tags_dict=None):
+def log_run(
+    model,
+    metrics: Dict[str, float],
+    params: Optional[Dict[str, str]] = None,
+    tags: Optional[Dict[str, str]] = None,
+    artifact_path: str = "model",
+    run_name: Optional[str] = None,
+):
     """
-    Logger des métriques dans MLFlow.
-    
-    Args:
-        metrics_dict: Dictionnaire de métriques à logger
-        params_dict: Dictionnaire de paramètres à logger (optionnel)
-        tags_dict: Dictionnaire de tags à logger (optionnel)
+    Helper compact pour logger un run MLflow (params + métriques + modèle).
+    - model : pipeline scikit-learn (préprocesseur inclus si déjà packagé)
+    - metrics : dict de métriques (floats)
+    - params : dict de paramètres (ex: best_params_)
+    - tags : dict de tags (ex: cible, version de features)
+    - artifact_path : sous-dossier pour le modèle loggé
+    - run_name : nom du run (optionnel)
     """
-    try:
-        if params_dict:
-            mlflow.log_params(params_dict)
-        
-        if metrics_dict:
-            mlflow.log_metrics(metrics_dict)
-        
-        if tags_dict:
-            mlflow.set_tags(tags_dict)
-        
-        print(f"Métriques loggées: {list(metrics_dict.keys())}")
-    except Exception as e:
-        print(f"Erreur lors du logging MLFlow: {e}")
+    with mlflow.start_run(run_name=run_name):
+        if params:
+            mlflow.log_params(params)
+        if metrics:
+            mlflow.log_metrics(metrics)
+        if tags:
+            mlflow.set_tags(tags)
+
+        # Log du modèle (scikit-learn)
+        mlflow.sklearn.log_model(model, artifact_path=artifact_path)
 
 
 if __name__ == "__main__":
-    # Exemple d'utilisation
+    # Exemple minimal
     setup_mlflow_experiment()
     
-    with mlflow.start_run():
-        # Exemple de logging
-        log_model_metrics(
-            metrics_dict={"rmse": 25000.0, "r2": 0.85},
-            params_dict={"model": "XGBoost", "n_estimators": 500},
-            tags_dict={"dataset": "house-prices"}
-        )
-        print("\nExemple d'exécution MLFlow terminé")
-        print(f"Consultez les résultats avec: mlflow ui --backend-store-uri file://{mlruns_dir.absolute()}")
+    # Exemple : logger un run factice sans modèle (metrics only)
+    with mlflow.start_run(run_name="demo_no_model"):
+        mlflow.log_params({"model": "demo", "note": "exemple"})
+        mlflow.log_metrics({"rmse": 25000.0, "r2": 0.85})
+        mlflow.set_tags({"dataset": "house-prices"})
+
+    print("\nExemple terminé. Consultez: mlflow ui --backend-store-uri file://{}".format(mlruns_dir.absolute()))
