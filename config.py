@@ -42,6 +42,16 @@ TESTS_DIR = PROJECT_ROOT / "tests"
 # Chemins MLFlow
 MLRUNS_DIR = PROJECT_ROOT / "mlruns"
 
+# === MLflow Configuration ===
+
+# URI du serveur MLflow (local UI)
+# - Local UI: "http://127.0.0.1:5000"
+# - Local sans UI: f"file://{MLRUNS_DIR}"
+# - Serveur distant: "http://<ip_serveur>:5000"
+MLFLOW_TRACKING_URI = f"file://{MLRUNS_DIR}"
+
+# Nom par défaut de l'expérience MLflow
+MLFLOW_EXPERIMENT_NAME = "house-price-prediction"
 # Fichiers spécifiques
 MODEL_PATH = OUTPUT_MODELS / "final_model.pkl"
 TRAIN_DATA_PATH = DATA_RAW / "train.csv"
