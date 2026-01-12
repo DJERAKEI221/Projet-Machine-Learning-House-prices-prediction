@@ -1,7 +1,11 @@
 import mlflow
+import mlflow.sklearn
+from sklearn.metrics import mean_squared_error
 
 with mlflow.start_run():
-    print("Training started...")
-    mlflow.log_param("example_param", 123)
-    mlflow.log_metric("example_metric", 0.42)
-    print("Training finished!")
+    mlflow.log_param("alpha", args.alpha)
+    model = ...
+    preds = model.predict(X_test)
+    rmse = mean_squared_error(y_test, preds, squared=False)
+    mlflow.log_metric("rmse", rmse)
+    mlflow.sklearn.log_model(model, artifact_path="model")
