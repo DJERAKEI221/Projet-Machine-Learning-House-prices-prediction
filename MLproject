@@ -1,0 +1,7 @@
+name: house-price-project
+
+entry_points:
+  main:
+    parameters:
+      alpha: {type: float, default: 0.5}
+    command: "python scripts/train.py --alpha {alpha}"
