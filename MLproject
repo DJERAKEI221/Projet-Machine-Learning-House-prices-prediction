@@ -1,6 +1,5 @@
 name: house-price-project
 
-
 entry_points:
   main:
     parameters:
