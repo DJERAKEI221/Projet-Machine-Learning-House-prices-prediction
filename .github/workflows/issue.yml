@@ -23,7 +23,7 @@ jobs:
 
           Merci @${{ github.event.issue.user.login }} d'avoir signalé ce problème.
           L'équipe est déjà en train de résoudre le problème signaler 
-          👉 Priorité : à examiner  
+         
           👉 Statut : en attente de triage
 
           _Ceci est un message automatique._
