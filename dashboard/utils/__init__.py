@@ -1,2 +1,0 @@
-"""Utilitaires pour le dashboard."""
-
