@@ -1,0 +1,28 @@
+name: Issue Automation
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  auto-respond:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Respond to new issue
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        issue-number: ${{ github.event.issue.number }}
+        body: |
+          Merci d'avoir ouvert une issue !
+          Un maintainer examinera cela prochainement 
+
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Add default label
+      uses: actions-ecosystem/action-add-labels@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        issue_number: ${{ github.event.issue.number }}
+        labels: |
+          needs-triage
