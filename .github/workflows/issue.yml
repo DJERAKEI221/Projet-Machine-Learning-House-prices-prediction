@@ -22,9 +22,7 @@ jobs:
           **Nouvelle Issue Signalée !**
 
           Merci @${{ github.event.issue.user.login }} d'avoir signalé ce problème.
-
-          Tous les collaborateurs sont invités à prendre connaissance de cette issue.
-
+          L'équipe est déjà en train de résoudre le problème signaler 
           👉 Priorité : à examiner  
           👉 Statut : en attente de triage
 
