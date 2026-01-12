@@ -83,3 +83,4 @@ jobs:
           echo "Model file not found - model must be trained via notebooks"
         fi
       continue-on-error: true
+ 
