@@ -85,6 +85,7 @@ def log_run(
             mlflow.set_tags(tags)
 
         # Log du modèle (scikit-learn)
+        
         mlflow.sklearn.log_model(model, artifact_path=artifact_path)
 
 

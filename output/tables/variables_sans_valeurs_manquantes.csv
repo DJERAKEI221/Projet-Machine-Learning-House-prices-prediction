@@ -2,7 +2,7 @@ Variable,Type
 identifiant,Numerique
 type_de_logement,Categorielle
 zonage_classification,Categorielle
-facade_en_pieds,Categorielle
+facade_en_pieds,Numerique
 superficie_du_lot_pieds,Numerique
 type_de_route,Categorielle
 acces_a_une_allee,Categorielle
@@ -25,7 +25,7 @@ materiau_du_toit,Categorielle
 revetement_exterieur_1,Categorielle
 revetement_exterieur_2,Categorielle
 type_de_parement_en_maconnerie,Categorielle
-surface_de_parement_pieds,Categorielle
+surface_de_parement_pieds,Numerique
 qualite_exterieure,Categorielle
 etat_exterieur,Categorielle
 type_de_fondation,Categorielle
@@ -58,7 +58,7 @@ fonctionnalite_globale,Categorielle
 nombre_de_cheminees,Numerique
 qualite_de_la_cheminee,Categorielle
 type_de_garage,Categorielle
-annee_de_construction_du_garage,Categorielle
+annee_de_construction_du_garage,Numerique
 finition_interieure_du_garage,Categorielle
 capacite_du_garage_voitures,Numerique
 surface_du_garage,Numerique
@@ -80,3 +80,4 @@ annee_de_vente,Numerique
 type_de_vente,Categorielle
 condition_de_la_vente,Categorielle
 prix_de_vente,Numerique
+HasGarage,Numerique
