@@ -1,127 +1,222 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import os
+import time
+import joblib
+import numpy as np
+import pandas as pd
 import mlflow
 import mlflow.sklearn
-import pandas as pd
-import numpy as np
-import os
 
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-
-from xgboost import XGBRegressor
-from lightgbm import LGBMRegressor
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.metrics import (
+    r2_score, mean_squared_error, mean_absolute_error,
+    mean_absolute_percentage_error, max_error
+)
+from sklearn.pipeline import Pipeline
+from sklearn.dummy import DummyRegressor
+from sklearn.linear_model import Ridge, Lasso
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+
+import lightgbm as lgb
 
 # =========================
 # CONFIG MLflow
 # =========================
-mlflow.set_tracking_uri("file:../mlruns")
+mlflow.set_tracking_uri("file:./mlruns")
 mlflow.set_experiment("house-price-model-testing")
 
-
-def evaluate_model(y_true, y_pred):
-    """Compute evaluation metrics."""
-    rmse = mean_squared_error(y_true, y_pred, squared=False)
-    mae = mean_absolute_error(y_true, y_pred)
-    r2 = r2_score(y_true, y_pred)
-    return rmse, mae, r2
+RANDOM_STATE = 42
+TARGET = "SalePrice"
 
 
+# ============================================================
+# UTILITAIRES METRIQUES
+# ============================================================
+def rmse(y_true, y_pred):
+    return np.sqrt(mean_squared_error(y_true, y_pred))
+
+
+def get_all_performances(value_train: tuple, values_test: tuple, metrics: list):
+    test_perfs, train_perfs, metric_names = [], [], []
+    for metric_func in metrics:
+        metric_names.append(metric_func.__name__)
+        train_perfs.append(metric_func(*value_train))
+        test_perfs.append(metric_func(*values_test))
+    return pd.DataFrame({"metric": metric_names, "train": train_perfs, "test": test_perfs})
+
+
+METRICS_LOG = [
+    r2_score, mean_squared_error, rmse,
+    mean_absolute_error, mean_absolute_percentage_error, max_error
+]
+
+
+# ============================================================
+# CHARGEMENT DES DONNÉES
+# ============================================================
+def load_data():
+    train_path = "data/processed/train_outliers_treated.csv"
+    test_path = "data/processed/test_outliers_treated.csv"
+
+    assert os.path.exists(train_path), f"Fichier manquant: {train_path}"
+    assert os.path.exists(test_path), f"Fichier manquant: {test_path}"
+
+    df_train = pd.read_csv(train_path)
+    df_test = pd.read_csv(test_path)
+
+    assert TARGET in df_train.columns, f"{TARGET} absent dans train"
+
+    print("📂 Données chargées")
+    return df_train, df_test
+
+
+# ============================================================
+# MAIN
+# ============================================================
 def main():
 
-    print("===== Loading Dataset =====")
-    df = pd.read_csv("data/processed/train_final.csv")
+    df_train, df_test = load_data()
 
-    # On assume que la colonne cible s'appelle 'SalePrice'
-    target_col = "SalePrice"
-    assert target_col in df.columns, f"colonne cible {target_col} introuvable"
+    X = df_train.drop(columns=[TARGET])
+    y_raw = df_train[TARGET]
 
-    X = df.drop(columns=[target_col])
-    y = df[target_col]
+    print(f"X: {X.shape} | y_raw: {y_raw.shape}")
 
-    # train/test split
+    # LOG1P pour entrainement
+    y = np.log1p(y_raw)
+
+    # Split train/test interne
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
+        X, y, test_size=0.20, random_state=RANDOM_STATE
     )
 
-    # =========================
-    # MODELES
-    # =========================
-    models = {
-        "LightGBM": LGBMRegressor(
-            n_estimators=500, max_depth=6, learning_rate=0.01, num_leaves=31,
-            feature_fraction=0.9, bagging_fraction=0.9, bagging_freq=5,
-            min_child_samples=20, random_state=42, n_jobs=-1, verbose=-1
-        ),
-        "XGBoost": XGBRegressor(
-            n_estimators=500, max_depth=5, learning_rate=0.01, subsample=0.9,
-            colsample_bytree=0.9, min_child_weight=3, random_state=42, n_estimators_thread=1
-        ),
-        "RandomForest": RandomForestRegressor(
-            n_estimators=300, max_depth=12, min_samples_split=5, min_samples_leaf=2,
-            random_state=42, n_jobs=-1
-        ),
-        "GradientBoosting": GradientBoostingRegressor(
-            n_estimators=300, max_depth=5, learning_rate=0.01,
-            min_samples_split=5, min_samples_leaf=2, random_state=42
+    print("✅ Split OK")
+    print(f"Train: {X_train.shape} | Test: {X_test.shape}")
+
+    # ===============================
+    # PREPROCESSING (à adapter si besoin)
+    # ===============================
+    try:
+        preprocessor
+    except NameError:
+        from sklearn.compose import ColumnTransformer
+        from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+        num_cols = X_train.select_dtypes(include=["int64", "float64"]).columns
+        cat_cols = X_train.select_dtypes(include=["object"]).columns
+
+        preprocessor = ColumnTransformer(
+            transformers=[
+                ("num", StandardScaler(), num_cols),
+                ("cat", OneHotEncoder(handle_unknown="ignore"), cat_cols)
+            ]
         )
+        print("⚠️ preprocessor n'existait pas → pipeline par défaut ajouté")
+
+    # ===============================
+    # MODELES + GRIDSEARCH
+    # ===============================
+    models = {
+        "Dummy": {
+            "pipe": Pipeline([("preprocess", preprocessor), ("model", DummyRegressor(strategy="median"))]),
+            "params": {}
+        },
+        "Ridge": {
+            "pipe": Pipeline([("preprocess", preprocessor), ("model", Ridge())]),
+            "params": {"model__alpha": [0.1, 0.5, 1.0, 2.0, 10.0]}
+        },
+        "Lasso": {
+            "pipe": Pipeline([("preprocess", preprocessor), ("model", Lasso(max_iter=50000))]),
+            "params": {"model__alpha": [1e-3, 1e-2, 1e-1]}
+        },
+        "RandomForest": {
+            "pipe": Pipeline([("preprocess", preprocessor), ("model", RandomForestRegressor(random_state=42, n_jobs=-1))]),
+            "params": {
+                "model__n_estimators": [200, 400],
+                "model__max_depth": [None, 10],
+                "model__min_samples_leaf": [1, 5],
+            }
+        },
+        "GradientBoosting": {
+            "pipe": Pipeline([("preprocess", preprocessor), ("model", GradientBoostingRegressor(random_state=42))]),
+            "params": {
+                "model__n_estimators": [200, 400],
+                "model__learning_rate": [0.05, 0.1],
+                "model__max_depth": [3, 4]
+            }
+        },
+        "LightGBM": {
+            "pipe": Pipeline([("preprocess", preprocessor), ("model", lgb.LGBMRegressor(objective="regression", random_state=42))]),
+            "params": {
+                "model__n_estimators": [500, 1000],
+                "model__learning_rate": [0.03, 0.05],
+                "model__max_depth": [-1, 6],
+                "model__num_leaves": [31, 63]
+            }
+        }
     }
 
     best_rmse = np.inf
     best_model = None
-    best_model_name = None
+    best_name = None
 
-    print("===== Training & Logging =====")
-
-    for name, model in models.items():
+    # ===============================
+    # MLflow Logging
+    # ===============================
+    for name, obj in models.items():
 
         print(f"📌 Training: {name}")
-
         with mlflow.start_run(run_name=name):
 
-            # Log hyperparams du modèle
-            params = model.get_params()
+            gs = GridSearchCV(
+                estimator=obj["pipe"],
+                param_grid=obj["params"],
+                scoring="neg_root_mean_squared_error",
+                cv=3,
+                n_jobs=-1
+            )
+
+            t0 = time.time()
+            gs.fit(X_train, y_train)
+            duration = round(time.time() - t0, 3)
+
+            best = gs.best_estimator_
+            params = gs.best_params_
+
+            # Predictions
+            yhat_train = best.predict(X_train)
+            yhat_test = best.predict(X_test)
+
+            # Log metrics
+            rmse_val = rmse(y_test, yhat_test)
+            mlflow.log_metric("rmse", rmse_val)
+            mlflow.log_metric("fit_time", duration)
             mlflow.log_params(params)
 
-            # Fit
-            model.fit(X_train, y_train)
+            print(f"✔ {name}: RMSE={rmse_val:.4f}")
 
-            # Predict
-            y_pred = model.predict(X_test)
+            if rmse_val < best_rmse:
+                best_rmse = rmse_val
+                best_name = name
+                best_model = best
 
-            # Compute metrics
-            rmse, mae, r2 = evaluate_model(y_test, y_pred)
-            mlflow.log_metric("rmse", rmse)
-            mlflow.log_metric("mae", mae)
-            mlflow.log_metric("r2", r2)
+    print(f"\n🏆 Best model: {best_name} (RMSE={best_rmse:.4f})")
 
-            # Log modèle
-            mlflow.sklearn.log_model(model, "model")
-
-            print(f"✔ {name} done: RMSE={rmse:.4f}")
-
-            if rmse < best_rmse:
-                best_rmse = rmse
-                best_model = model
-                best_model_name = name
-
-    print("===== Best Model Selection =====")
-    print(f" Best Model: {best_model_name} (RMSE={best_rmse:.4f})")
-
-    # Sauvegarde best model localement
+    # ===============================
+    # Sauvegarde BEST MODEL
+    # ===============================
     os.makedirs("output/models", exist_ok=True)
-    best_model_path = f"output/models/best_model.pkl"
-    import joblib
-    joblib.dump(best_model, best_model_path)
+    path = "output/models/best_model.pkl"
+    joblib.dump(best_model, path)
 
-    print(f"📁 Best model saved to: {best_model_path}")
-
-    # Log le best_model dans MLflow
     with mlflow.start_run(run_name="best_model"):
-        mlflow.log_param("best_model_name", best_model_name)
-        mlflow.log_metric("best_model_rmse", best_rmse)
+        mlflow.log_param("best_model", best_name)
+        mlflow.log_metric("best_rmse", best_rmse)
         mlflow.sklearn.log_model(best_model, "best_model")
 
-    print(" Training completed successfully !")
+    print(f"📁 Best model saved at: {path}")
 
 
 if __name__ == "__main__":
