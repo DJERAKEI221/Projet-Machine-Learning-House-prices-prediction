@@ -31,7 +31,6 @@ ProjetMachine-Learning-House-prices-prediction/
 │   ├── exploration_base_donnees.ipynb    # Exploration et analyse des données
 │   ├── traitement.ipynb                   # Nettoyage et préparation des données
 │   ├── feature_engineering.ipynb         # Feature engineering et modélisation
-│   ├── api_fastapi.ipynb                 # API FastAPI pour l'inférence
 │   ├── data/processed/                   # Exports intermédiaires
 │   └── output/                          # Modèles et préprocesseurs sauvegardés
 │       ├── models/                       # Modèle final (model_final.joblib)
