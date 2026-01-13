@@ -98,7 +98,6 @@ Le projet suit un pipeline structuré en plusieurs étapes :
 - Transformation des variables asymétriques (log, Box-Cox)
 - Transformation logarithmique de la variable cible (SalePrice)
 - Entraînement et comparaison de plusieurs modèles :
-  - Régression Linéaire (baseline)
   - Ridge, Lasso, ElasticNet
   - Random Forest
   - Gradient Boosting
