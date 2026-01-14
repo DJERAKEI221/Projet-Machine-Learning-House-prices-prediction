@@ -14,7 +14,7 @@ Ce projet vise à développer un modèle de machine learning capable de prédire
 - **Prédiction précise** : Développer un modèle performant pour prédire le prix de vente des maisons
 - **Analyse approfondie** : Identifier les variables les plus importantes pour la prédiction
 - **Pipeline complet** : Mettre en place un workflow de bout en bout, de l'exploration à la déploiement
-- **Pratiques professionnelles** : Intégrer MLflow pour le suivi des expériences, tests unitaires et CI/CD
+- **MLflow** : Intégrer MLflow pour le suivi des expériences, tests unitaires et CI/CD
 
 ---
 
@@ -30,7 +30,7 @@ ProjetMachine-Learning-House-prices-prediction/
 ├── notebooks/
 │   ├── exploration_base_donnees.ipynb    # Exploration et analyse des données
 │   ├── traitement.ipynb                   # Nettoyage et préparation des données
-│   ├── feature_engineering.ipynb         # Feature engineering et modélisation
+│   ├── feat_engeneering_modeling.ipynb         # Feature engineering et modélisation
 │   ├── data/processed/                   # Exports intermédiaires
 │   └── output/                          # Modèles et préprocesseurs sauvegardés
 │       ├── models/                       # Modèle final (model_final.joblib)
@@ -57,14 +57,11 @@ ProjetMachine-Learning-House-prices-prediction/
 │   └── tables/                          # Tableaux d'analyse
 │
 ├── docs/                                # Documentation détaillée
-│   ├── GESTION_VALEURS_MANQUANTES_OUTLIERS.md
-│   ├── SELECTION_VARIABLES_MODELE.md
-│   └── TRANSFORMATION_LOGARITHMIQUE.md
 │
 ├── tests/                               # Tests unitaires
 ├── mlruns/                              # Stockage MLflow (expériences)
 ├── requirements.txt                     # Dépendances principales
-├── requirements_api.txt                 # Dépendances pour l'API
+├── requirements_api.txt                 # Dépendances
 └── README.md                            # Ce fichier
 ```
 
@@ -90,7 +87,7 @@ Le projet suit un pipeline structuré en plusieurs étapes :
 - Tests ANOVA pour variables qualitatives
 - Traduction et mapping des variables
 
-### 3. Feature Engineering et Modélisation (`feature_engineering.ipynb`)
+### 3. Feature Engineering et Modélisation (`feat_engeneering_modeling.ipynb`)
 
 - Création de nouvelles features
 - Encodage des variables catégorielles (One-Hot, Ordinal)
@@ -137,7 +134,7 @@ Projet Machine Learning ISE-2 ENSAE
 **Sous la supervision de :** Mme Mously DIAW | [GitHub](https://github.com/MouslyDiaw)
 
 **Auteurs :**
-- Compaoré BASSIROU : [LinkedIn](https://www.linkedin.com/in/mohamadi-bassirou-compaore-04a712300)
+- Compaoré BASSIROU :  [LinkedIn](https://www.linkedin.com/in/mohamadi-bassirou-compaore-04a712300)
 - Samba DIENG : sambadieng122003@gmail.com | [LinkedIn](https://www.linkedin.com/in/samba-dieng-b13650247)
 - Yves Mistalengar DJERAKEI : yvesdjerake@gmail.com | [LinkedIn](https://www.linkedin.com/in/djerake%C3%AF-mistalengar-086b3a21b/)
 - Divana KERENCIA : dyvanaseukam@gmail.com | [LinkedIn](https://www.linkedin.com/in/dyvana-seunkam-8aa93b340)
