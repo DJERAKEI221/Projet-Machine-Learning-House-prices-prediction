@@ -80,8 +80,7 @@ ProjetMachine-Learning-House-prices-prediction/
 │   ├── raw/                    # Données brutes
 │   ├── interim/                # Données intermédiaires
 │   └── processed/              # Données nettoyées
-=======
-├── notebooks/
+├── 📁 notebooks/
 │   ├── exploration_base_donnees.ipynb    # Exploration et analyse des données
 │   ├── traitement.ipynb                   # Nettoyage et préparation des données
 │   ├── feat_engeneering_modeling.ipynb         # Feature engineering et modélisation
@@ -89,8 +88,6 @@ ProjetMachine-Learning-House-prices-prediction/
 │   └── output/                          # Modèles et préprocesseurs sauvegardés
 │       ├── models/                       # Modèle final (model_final.joblib)
 │       └── preprocess/                   # Préprocesseurs sauvegardés
->>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
-│
 ├── 📁 notebooks/              # Notebooks d'analyse
 │   ├── exploration_base_donnees.ipynb
 │   ├── traitement.ipynb
