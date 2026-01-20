@@ -348,7 +348,7 @@ pytest tests/ -v --cov=src --cov-report=html
 - [MLflow](https://mlflow.org/) - Gestion d'expériences ML
 - [XGBoost](https://xgboost.readthedocs.io/) - Gradient Boosting
 - [LightGBM](https://lightgbm.readthedocs.io/) - Gradient Boosting optimisé
-=======
+  
 **Auteurs :**
 - Compaoré BASSIROU : mohamadibassirou@gmail.com  [LinkedIn](https://www.linkedin.com/in/mohamadi-bassirou-compaore-04a712300)
 - Samba DIENG : sambadieng122003@gmail.com | [LinkedIn](https://www.linkedin.com/in/samba-dieng-b13650247)
