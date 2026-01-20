@@ -15,7 +15,6 @@
 
 </div>
 
-<<<<<<< HEAD
 ## 📋 Table des Matières
 
 - [À Propos](#-à-propos)
@@ -79,8 +78,6 @@ Le dataset provient de la compétition Kaggle **"House Prices: Advanced Regressi
 
 ```
 ProjetMachine-Learning-House-prices-prediction/
-│
-<<<<<<< HEAD
 ├── 📁 data/                    # Gestion des données
 │   ├── raw/                    # Données brutes
 │   ├── interim/                # Données intermédiaires
@@ -113,8 +110,6 @@ ProjetMachine-Learning-House-prices-prediction/
 ├── 📁 dashboard/              # Application Streamlit
 │   ├── app.py
 │   └── assets/
-│
-<<<<<<< HEAD
 ├── 📁 tests/                  # Tests unitaires
 ├── 📁 docs/                   # Documentation détaillée
 └── 📁 mlruns/                 # Stockage MLflow
@@ -238,7 +233,6 @@ pytest tests/ -v --cov=src --cov-report=html
 
 ### Feature Engineering
 
-<<<<<<< HEAD
 - **Nouvelles features** : âges (HouseAge, RemodAge, GarageAge), surfaces totales (TotalSF, TotalPorchSF), équipements (TotalBath)
 - **Encodage** : One-Hot Encoding (nominales), Ordinal Encoding (ordinales)
 - **Transformation** : Transformation logarithmique pour variables asymétriques
@@ -347,9 +341,8 @@ pytest tests/ -v --cov=src --cov-report=html
 - [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques) - Kaggle Competition
 - [Dataset Description](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data) - Documentation complète
 
-### 🔗 Technologies
-
-<<<<<<< HEAD
+### 🔗 Technologies et Documentation
+- [https://www.canva.com/design/DAFPHR8GPhw/1YOoExutK-dY2TmVuYQ6mw/edit) - Cours machine learning I ENSAE
 - [Scikit-learn](https://scikit-learn.org/) - Machine Learning
 - [Pandas](https://pandas.pydata.org/) - Manipulation de données
 - [Streamlit](https://streamlit.io/) - Dashboard interactif
@@ -365,7 +358,6 @@ pytest tests/ -v --cov=src --cov-report=html
 - Ange Emilson RAYAN : rayanemil20@gmail.com
 
 Ce projet est réalisé dans le cadre académique.
->>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
 
 ---
 
