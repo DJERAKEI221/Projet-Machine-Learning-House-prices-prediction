@@ -30,19 +30,6 @@ ENV/
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
-# MLFlow
-mlruns/
-mlartifacts/
-
-# Data
-data/raw/*.csv
-data/raw/*.zip
-!data/raw/.gitkeep
-
-# Output
-# Les fichiers de sortie sont maintenant versionnés dans GitHub
-# Tous les fichiers dans output/ seront inclus dans le dépôt
-
 # IDE
 .vscode/
 .idea/
@@ -54,21 +41,21 @@ data/raw/*.zip
 .DS_Store
 Thumbs.db
 
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.coverage.*
-coverage.xml
-*.cover
+# MLflow
+mlruns/
+.mlflow/
+
+# Data files (optionnel - à décommenter si vous ne voulez pas versionner les données)
+# data/raw/*.csv
+# data/processed/*.csv
+# notebooks/output/
+
+# Streamlit
+.streamlit/secrets.toml
 
 # Logs
 *.log
 
-# Fichiers temporaires Word
-~$*.docx
-~$*.doc
-
-# Fichiers Excel temporaires
-*.xlsx
-*.xls
+# Temporary files
+*.tmp
+*.temp

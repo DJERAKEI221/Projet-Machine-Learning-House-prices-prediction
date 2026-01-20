@@ -1,0 +1,887 @@
+/* ============================================================================
+   DASHBOARD STREAMLIT - DESIGN PROFESSIONNEL ET MODERNE
+   ============================================================================ */
+
+/* =========================
+   VARIABLES CSS MODERNES
+   ========================= */
+:root {
+    /* Couleurs principales */
+    --primary-color: #2563eb;
+    --primary-dark: #1e40af;
+    --primary-light: #3b82f6;
+    --secondary-color: #10b981;
+    --accent-color: #f59e0b;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+    --success-color: #10b981;
+    
+    /* Arrière-plans */
+    --dark-bg: #0f172a;
+    --dark-secondary: #1e293b;
+    --card-bg: #ffffff;
+    --card-bg-hover: #f8fafc;
+    --main-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --main-bg-alt: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    
+    /* Texte */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-light: #94a3b8;
+    --text-white: #ffffff;
+    
+    /* Bordures */
+    --border-color: #e2e8f0;
+    --border-radius: 12px;
+    --border-radius-lg: 16px;
+    
+    /* Ombres */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-danger: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --gradient-dark: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* =========================
+   STYLE GLOBAL
+   ========================= */
+* {
+    box-sizing: border-box;
+}
+
+.main {
+    background: var(--main-bg-alt);
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+/* =========================
+   HEADER MODERNE
+   ========================= */
+.main-header {
+    background: var(--gradient-primary);
+    padding: 3rem 2rem;
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-xl);
+    color: var(--text-white);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.main-header h1 {
+    color: var(--text-white);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 1;
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.main-header p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   CARTES MÉTRIQUES MODERNES
+   ========================= */
+.metric-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+    border-left: 4px solid var(--primary-color);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-normal);
+}
+
+.metric-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+    background: var(--card-bg-hover);
+}
+
+.metric-card:hover::before {
+    transform: scaleX(1);
+}
+
+.metric-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.metric-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0.5rem 0;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* =========================
+   SIDEBAR MODERNE
+   ========================= */
+[data-testid="stSidebar"] {
+    background: var(--gradient-dark);
+    color: var(--text-white);
+}
+
+[data-testid="stSidebar"] .stRadio {
+    margin: 0.5rem 0;
+}
+
+[data-testid="stSidebar"] .stRadio label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+[data-testid="stSidebar"] .stRadio label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: var(--primary-light);
+    transform: scaleY(0);
+    transition: transform var(--transition-normal);
+}
+
+[data-testid="stSidebar"] .stRadio label:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-light);
+    color: var(--text-white);
+    transform: translateX(4px);
+}
+
+[data-testid="stSidebar"] .stRadio label:hover::before {
+    transform: scaleY(1);
+}
+
+[data-testid="stSidebar"] .stRadio input[type="radio"]:checked + label {
+    background: var(--gradient-primary);
+    color: var(--text-white);
+    font-weight: 600;
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-md);
+}
+
+[data-testid="stSidebar"] .stRadio input[type="radio"]:checked + label::before {
+    transform: scaleY(1);
+    background: var(--text-white);
+}
+
+[data-testid="stSidebar"] .stRadio label i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* =========================
+   BOUTONS MODERNES
+   ========================= */
+.stButton > button {
+    background: var(--gradient-primary);
+    color: var(--text-white);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.stButton > button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: var(--primary-dark);
+}
+
+.stButton > button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.stButton > button:active {
+    transform: translateY(0);
+}
+
+/* =========================
+   SECTIONS ET TITRES
+   ========================= */
+h1, h2, h3 {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid var(--primary-color);
+    display: inline-block;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--gradient-primary);
+    animation: expandWidth 0.5s ease-out;
+}
+
+@keyframes expandWidth {
+    from { width: 0; }
+    to { width: 50px; }
+}
+
+h3 {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+}
+
+/* =========================
+   CARTES DE CONTENU
+   ========================= */
+.content-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem;
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.content-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    border-color: var(--primary-color);
+}
+
+.content-card:hover::before {
+    left: 100%;
+}
+
+/* =========================
+   GRAPHIQUES AMÉLIORÉS
+   ========================= */
+.plot-container {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    margin: 1rem 0;
+    border: 3px solid var(--primary-color);
+    border-image: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%) 1;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.plot-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    z-index: 1;
+}
+
+.plot-container:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-4px);
+    border-color: var(--primary-light);
+    border-width: 3px;
+}
+
+/* Styles pour les conteneurs Plotly dans Streamlit */
+div[data-testid="stPlotlyChart"] {
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--primary-color);
+    background: var(--card-bg);
+    padding: 0.5rem;
+    transition: all var(--transition-normal);
+    position: relative;
+}
+
+div[data-testid="stPlotlyChart"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    z-index: 10;
+}
+
+div[data-testid="stPlotlyChart"]:hover {
+    box-shadow: var(--shadow-2xl);
+    transform: translateY(-2px);
+    border-color: var(--primary-light);
+}
+
+/* Amélioration des graphiques Plotly */
+.js-plotly-plot {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+/* Bordures pour les graphiques Plotly */
+.plotly {
+    border-radius: var(--border-radius);
+}
+
+/* Style pour les graphiques avec bordures arrondies */
+.plotly .modebar {
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+/* =========================
+   ALERTES MODERNES
+   ========================= */
+.stSuccess {
+    background: var(--gradient-success);
+    color: var(--text-white);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--success-color);
+    box-shadow: var(--shadow-md);
+    animation: slideInRight 0.3s ease-out;
+}
+
+.stInfo {
+    background: var(--gradient-info);
+    color: var(--text-white);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--info-color);
+    box-shadow: var(--shadow-md);
+    animation: slideInRight 0.3s ease-out;
+}
+
+.stWarning {
+    background: var(--gradient-warning);
+    color: var(--text-white);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--warning-color);
+    box-shadow: var(--shadow-md);
+    animation: slideInRight 0.3s ease-out;
+}
+
+.stError {
+    background: var(--gradient-danger);
+    color: var(--text-white);
+    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    border-left: 4px solid var(--danger-color);
+    box-shadow: var(--shadow-md);
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* =========================
+   MÉTRIQUES STREAMLIT AMÉLIORÉES
+   ========================= */
+[data-testid="stMetricValue"] {
+    font-size: 2rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-testid="stMetricLabel"] {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* =========================
+   TABS MODERNES
+   ========================= */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+    background-color: transparent;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.stTabs [data-baseweb="tab"] {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px 10px 0 0;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    border: 1px solid transparent;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
+}
+
+.stTabs [aria-selected="true"] {
+    background: var(--gradient-primary);
+    color: var(--text-white);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+/* =========================
+   FORMULAIRES MODERNES
+   ========================= */
+.stSelectbox label, .stSlider label, .stNumberInput label {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.stSelectbox > div > div {
+    border-radius: var(--border-radius);
+    border: 2px solid var(--border-color);
+    transition: all var(--transition-normal);
+}
+
+.stSelectbox > div > div:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.stSlider {
+    padding: 1rem 0;
+}
+
+.stSlider > div > div {
+    background: var(--gradient-primary);
+}
+
+/* =========================
+   ANIMATIONS
+   ========================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.scale-in {
+    animation: scaleIn 0.4s ease-out;
+}
+
+/* =========================
+   SCROLLBAR PERSONNALISÉE
+   ========================= */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* =========================
+   BADGES ET TAGS
+   ========================= */
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    animation: scaleIn 0.3s ease-out;
+}
+
+.badge-primary {
+    background: var(--gradient-primary);
+    color: var(--text-white);
+}
+
+.badge-success {
+    background: var(--gradient-success);
+    color: var(--text-white);
+}
+
+.badge-warning {
+    background: var(--gradient-warning);
+    color: var(--text-white);
+}
+
+.badge-danger {
+    background: var(--gradient-danger);
+    color: var(--text-white);
+}
+
+/* =========================
+   DIVISEURS MODERNES
+   ========================= */
+hr {
+    border: none;
+    height: 2px;
+    background: var(--gradient-primary);
+    margin: 2rem 0;
+    border-radius: 2px;
+    position: relative;
+}
+
+hr::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+.footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-top: 4rem;
+    border-top: 1px solid var(--border-color);
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+}
+
+/* =========================
+   CARTE DE PRÉDICTION SPÉCIALE
+   ========================= */
+.prediction-card {
+    background: var(--gradient-primary);
+    color: var(--text-white);
+    border-radius: var(--border-radius-lg);
+    padding: 3rem;
+    text-align: center;
+    box-shadow: var(--shadow-2xl);
+    position: relative;
+    overflow: hidden;
+    animation: scaleIn 0.6s ease-out;
+}
+
+.prediction-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.prediction-card h1 {
+    color: var(--text-white);
+    font-size: 3.5rem;
+    margin: 1rem 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.prediction-card .prediction-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 768px) {
+    .main-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .metric-value {
+        font-size: 1.8rem;
+    }
+    
+    .prediction-card h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* =========================
+   LOADING SPINNER
+   ========================= */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid var(--text-white);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+/* =========================
+   EFFETS DE GLOW
+   ========================= */
+.glow {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
+    }
+    to {
+        box-shadow: 0 0 30px rgba(37, 99, 235, 0.8);
+    }
+}
+
+/* =========================
+   TOOLTIPS
+   ========================= */
+.tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 1rem;
+    background: var(--dark-bg);
+    color: var(--text-white);
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+}

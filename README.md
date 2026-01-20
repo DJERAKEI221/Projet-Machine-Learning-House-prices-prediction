@@ -1,160 +1,318 @@
-# Projet Machine Learning - Prédiction des Prix Immobiliers
+<div align="center">
 
-## Projet Laplace Immo
+# 🏠 House Prices Prediction
 
+**Projet Machine Learning - Prédiction des Prix Immobiliers**
 
-Projet réalisé dans le cadre du cours de Machine Learning I dispensé aux Élèves Ingénieurs Statisticiens Économistes (ISE-2) à l'École nationale de la Statistique et de l'Analyse économique Pierre NDIAYE (ENSAE).
+*Développé dans le cadre du cours de Machine Learning I - ENSAE*
 
-Ce projet vise à développer un modèle de machine learning capable de prédire avec précision le prix de vente des maisons en utilisant des techniques avancées de régression. Le dataset utilisé provient de la compétition Kaggle "House Prices: Advanced Regression Techniques" et contient 79 variables explicatives décrivant différentes caractéristiques des maisons.
-
----
-
-## Objectifs
-
-- **Prédiction précise** : Développer un modèle performant pour prédire le prix de vente des maisons
-- **Analyse approfondie** : Identifier les variables les plus importantes pour la prédiction
-- **Pipeline complet** : Mettre en place un workflow de bout en bout, de l'exploration à la déploiement
-- **Pratiques professionnelles** : Intégrer MLflow pour le suivi des expériences, tests unitaires et CI/CD
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![Scikit-learn](https://img.shields.io/badge/Scikit--learn-Latest-orange.svg)](https://scikit-learn.org/)
+[![MLflow](https://img.shields.io/badge/MLflow-Tracking-purple.svg)](https://mlflow.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red.svg)](https://streamlit.io/)
 
 ---
 
-## Structure du Projet
+</div>
+
+## 📋 Table des Matières
+
+- [À Propos](#-à-propos)
+- [Objectifs](#-objectifs)
+- [Résultats Clés](#-résultats-clés)
+- [Architecture](#-architecture)
+- [Installation](#-installation)
+- [Utilisation](#-utilisation)
+- [Modèles et Performance](#-modèles-et-performance)
+- [Équipe](#-équipe)
+- [Références](#-références)
+
+---
+
+## 📖 À Propos
+
+Ce projet développe un **modèle de machine learning performant** pour prédire le prix de vente des maisons en utilisant des techniques avancées de régression. 
+
+Le dataset provient de la compétition Kaggle **"House Prices: Advanced Regression Techniques"** et contient **79 variables explicatives** décrivant les caractéristiques des maisons (surface, qualité, localisation, équipements, etc.).
+
+**Contexte académique** : Projet réalisé dans le cadre du cours de **Machine Learning I** dispensé aux **Élèves Ingénieurs Statisticiens Économistes (ISE-2)** à l'**École nationale de la Statistique et de l'Analyse économique Pierre NDIAYE (ENSAE)**.
+
+---
+
+## 🎯 Objectifs
+
+| Objectif | Description |
+|----------|-------------|
+| **🎯 Prédiction Précise** | Développer un modèle performant avec erreur minimale |
+| **🔍 Analyse Approfondie** | Identifier les variables les plus importantes |
+| **⚙️ Pipeline Complet** | Workflow de bout en bout, de l'exploration au déploiement |
+| **🏆 Qualité du code et suivi** | MLflow, tests unitaires, CI/CD |
+| **📊 Visualisation** | Dashboard interactif pour exploration et prédiction |
+
+---
+
+## 🏆 Résultats Clés
+
+### Modèle Final : ElasticNet avec Transformation Logarithmique
+
+| Métrique | Valeur | Description |
+|----------|--------|-------------|
+| **MAE** | $14,892.69 | Erreur moyenne absolue (métrique principale) |
+| **RMSE** | $23,067.47 | Erreur quadratique moyenne |
+| **R²** | 0.9306 | 93.06% de variance expliquée |
+| **MAPE** | 8.90% | Erreur relative moyenne |
+
+**Performance** : Le modèle retenu (ElasticNet_WithTransform) présente le meilleur MAE parmi **16 configurations testées** (8 modèles × 2 versions : avec/sans transformation logarithmique).
+
+---
+
+## 🏗️ Architecture
+
+### Structure du Projet
 
 ```
 ProjetMachine-Learning-House-prices-prediction/
-├── data/
-│   ├── raw/                  # Données brutes (train.csv, test.csv, description)
-│   ├── interim/              # Données intermédiaires
-│   └── processed/            # Données nettoyées et prêtes pour l'entraînement
 │
-├── notebooks/
-│   ├── exploration_base_donnees.ipynb    # Exploration et analyse des données
-│   ├── traitement.ipynb                   # Nettoyage et préparation des données
-│   ├── feature_engineering.ipynb         # Feature engineering et modélisation
-│   ├── api_fastapi.ipynb                 # API FastAPI pour l'inférence
-│   ├── data/processed/                   # Exports intermédiaires
-│   └── output/                          # Modèles et préprocesseurs sauvegardés
-│       ├── models/                       # Modèle final (model_final.joblib)
-│       └── preprocess/                   # Préprocesseurs sauvegardés
+├── 📁 data/                    # Gestion des données
+│   ├── raw/                    # Données brutes
+│   ├── interim/                # Données intermédiaires
+│   └── processed/              # Données nettoyées
 │
-├── scripts/
-│   ├── integrate_mlflow.py              # Utilitaires pour MLflow
-│   ├── run_mlflow_ui.py                 # Lancement de l'interface MLflow
-│   ├── save_final_model.py              # Sauvegarde du modèle final
-│   ├── check_pep8.py                    # Vérification PEP 8
-│   └── format_code.py                   # Formatage automatique du code
+├── 📁 notebooks/              # Notebooks d'analyse
+│   ├── exploration_base_donnees.ipynb
+│   ├── traitement.ipynb
+│   └── feat_engeneering_modeling.ipynb
 │
-├── src/
-│   ├── feature_engineering.py           # Module de feature engineering
-│   └── model_pipline.py                # Pipeline de modélisation
+├── 📁 scripts/                # Scripts utilitaires
+│   ├── train_model.py
+│   ├── integrate_mlflow.py
+│   └── run_mlflow_ui.py
 │
-├── dashboard/                           # Application Dash interactive
-│   ├── components/                      # Composants réutilisables
-│   ├── pages/                           # Pages du dashboard
-│   └── utils/                           # Utilitaires
+├── 📁 src/                    # Code source modulaire
+│   ├── feature_engineering.py
+│   └── model_pipline.py
 │
-├── output/
-│   ├── figures/                         # Graphiques générés
-│   └── tables/                          # Tableaux d'analyse
+├── 📁 dashboard/              # Application Streamlit
+│   ├── app.py
+│   └── assets/
 │
-├── docs/                                # Documentation détaillée
-│   ├── GESTION_VALEURS_MANQUANTES_OUTLIERS.md
-│   ├── SELECTION_VARIABLES_MODELE.md
-│   └── TRANSFORMATION_LOGARITHMIQUE.md
-│
-├── tests/                               # Tests unitaires
-├── mlruns/                              # Stockage MLflow (expériences)
-├── requirements.txt                     # Dépendances principales
-├── requirements_api.txt                 # Dépendances pour l'API
-└── README.md                            # Ce fichier
+├── 📁 tests/                  # Tests unitaires
+├── 📁 docs/                   # Documentation détaillée
+└── 📁 mlruns/                 # Stockage MLflow
+```
+
+### Pipeline de Machine Learning
+
+```
+Données Brutes → Nettoyage → Exploration → Feature Engineering 
+    → Entraînement → Sélection → Déploiement (Dashboard)
+```
+
+**Composants principaux** :
+- **Preprocessing** : ColumnTransformer avec imputation et encodage
+- **Modèles** : 8 algorithmes testés (linéaires et basés sur arbres)
+- **Optimisation** : GridSearchCV avec validation croisée 5-fold
+- **Tracking** : MLflow pour suivi des expériences
+
+---
+
+## ⚙️ Installation
+
+### Prérequis
+
+| Composant | Version Minimale | Recommandée |
+|-----------|------------------|-------------|
+| **Python** | 3.8+ | 3.10+ |
+| **RAM** | 4 GB | 8 GB+ |
+| **Espace disque** | 2 GB | 5 GB+ |
+
+### Installation des Dépendances
+
+```
+# Cloner le repository
+git clone <repository-url>
+cd ProjetMachine-Learning-House-prices-prediction
+
+# Créer un environnement virtuel
+python -m venv venv
+
+# Activer l'environnement
+# Windows
+venv\Scripts\activate
+# Linux/Mac
+source venv/bin/activate
+
+# Installer les dépendances
+pip install -r requirements.txt
+```
+
+### Dépendances Principales
+
+- `scikit-learn` ≥1.0.0 - Machine Learning
+- `pandas` ≥1.3.0 - Manipulation de données
+- `numpy` ≥1.21.0 - Calculs numériques
+- `streamlit` ≥1.0.0 - Dashboard interactif
+- `mlflow` ≥1.20.0 - Tracking d'expériences
+- `xgboost`, `lightgbm` - Gradient Boosting
+
+---
+
+## 🚀 Utilisation
+
+### Notebooks d'Analyse
+
+1. **Exploration** : `notebooks/exploration_base_donnees.ipynb`
+2. **Traitement** : `notebooks/traitement.ipynb`
+3. **Modélisation** : `notebooks/feat_engeneering_modeling.ipynb`
+
+### Dashboard Interactif
+
+```
+cd dashboard
+streamlit run app.py
+```
+
+Le dashboard permet de :
+- 📊 Visualiser les performances des modèles
+- 🔍 Explorer les données et prédictions
+- 💰 Faire des prédictions interactives
+- 📈 Analyser les erreurs et résidus
+
+### MLflow UI
+
+```
+python scripts/run_mlflow_ui.py
+```
+
+### Tests
+
+```
+pytest tests/ -v --cov=src --cov-report=html
 ```
 
 ---
 
-## Pipeline de Machine Learning
+## 🤖 Modèles et Performance
 
-Le projet suit un pipeline structuré en plusieurs étapes :
+### Modèles Testés
 
-### 1. Traitement et Nettoyage (`traitement.ipynb`)
+| Catégorie | Modèles | Description |
+|-----------|---------|-------------|
+| **Linéaires** | LinearRegression, Ridge, Lasso, ElasticNet | Régularisation L1/L2 |
+| **Arbres** | RandomForest, GradientBoosting, XGBoost, LightGBM | Ensemble et boosting |
 
-- Gestion des valeurs manquantes structurelles (NA = absence de caractéristique)
-- Imputation des valeurs manquantes non structurelles
-- Traitement des outliers avec méthodes IQR
+### Optimisation
 
+- **GridSearchCV** : Recherche exhaustive des hyperparamètres
+- **Validation croisée** : 5-fold cross-validation
+- **Métriques** : MAE (priorité), RMSE, R², MAPE
+- **Transformation** : Évaluation avec et sans transformation logarithmique de la cible
 
-### 2. Exploration des Données (`exploration_base_donnees.ipynb`)
+### Feature Engineering
 
-- Analyse descriptive complète
-- Détection et traitement des valeurs manquantes structurelles
-- Identification des outliers
-- Analyse de corrélation pour variables quantitatives
-- Tests ANOVA pour variables qualitatives
-- Traduction et mapping des variables
-
-### 3. Feature Engineering et Modélisation (`feature_engineering.ipynb`)
-
-- Création de nouvelles features
-- Encodage des variables catégorielles (One-Hot, Ordinal)
-- Transformation des variables asymétriques (log, Box-Cox)
-- Transformation logarithmique de la variable cible (SalePrice)
-- Entraînement et comparaison de plusieurs modèles :
-  - Régression Linéaire (baseline)
-  - Ridge, Lasso, ElasticNet
-  - Random Forest
-  - Gradient Boosting
-  - LightGBM
-  - XGBoost
-- Optimisation des hyperparamètres avec GridSearchCV
-- Sélection du meilleur modèle
-- Sauvegarde du modèle final et des métadonnées
+- **Nouvelles features** : âges (HouseAge, RemodAge, GarageAge), surfaces totales (TotalSF, TotalPorchSF), équipements (TotalBath)
+- **Encodage** : One-Hot Encoding (nominales), Ordinal Encoding (ordinales)
+- **Transformation** : Transformation logarithmique pour variables asymétriques
 
 ---
 
-### Documentation Principale
+## 🧪 Qualité et Tests
 
-- **`README.md`** (ce fichier) : Vue d'ensemble du projet
-- **`README_CI_CD.md`** : Guide CI/CD, tests et qualité de code
-- **`README_MLFLOW.md`** : Guide d'utilisation de MLflow
+### Outils de Qualité
 
----
+- ✅ **Pytest** : Tests unitaires avec couverture de code
+- ✅ **Flake8** : Vérification PEP 8
+- ✅ **Black** : Formatage automatique
+- ✅ **MLflow** : Tracking des expériences
+- ✅ **GitHub Actions** : CI/CD automatisé
 
-## Tests et Qualité de Code
+### Métriques de Qualité
 
-Le projet utilise :
-
-- **GitHub Actions** : Pipeline CI/CD automatisé
-- **Pytest** : Tests unitaires avec couverture de code
-- **Flake8** : Vérification de la conformité PEP 8
-- **Black** : Formatage automatique du code
-- **MLflow** : Tracking des expériences et métriques
-
----
-
-## Auteurs et Licence
-
-Projet Machine Learning ISE-2 ENSAE
-
-École nationale de la Statistique et de l'Analyse économique Pierre NDIAYE (ENSAE)
-
-**Sous la supervision de :** Mme Mously DIAW | [GitHub](https://github.com/MouslyDiaw)
-
-**Auteurs :**
-- Compaoré BASSIROU : [LinkedIn](https://www.linkedin.com/in/mohamadi-bassirou-compaore-04a712300)
-- Samba DIENG : sambadieng122003@gmail.com | [LinkedIn](https://www.linkedin.com/in/samba-dieng-b13650247)
-- Yves Mistalengar DJERAKEI : yvesdjerake@gmail.com | [LinkedIn](https://www.linkedin.com/in/djerake%C3%AF-mistalengar-086b3a21b/)
-- Divana KERENCIA : dyvanaseukam@gmail.com | [LinkedIn](https://www.linkedin.com/in/dyvana-seunkam-8aa93b340)
-- Ange Emilson RAYAN : rayanemil20@gmail.com
-
-Ce projet est réalisé dans le cadre académique.
+- Couverture de code pour tous les modules principaux
+- Conformité PEP 8 vérifiée automatiquement
+- Documentation complète avec docstrings
+- Versioning des expériences avec MLflow
 
 ---
 
-## Références
+## 👥 Équipe
 
-### Dataset
+### 🎓 Supervision
 
-- **House Prices: Advanced Regression Techniques** : [Données](https://www.kaggle.com/c/house-prices-advanced-regression-techniques)
+**Mme Mously DIAW**  
+*Superviseur du projet*  
+[![GitHub](https://img.shields.io/badge/GitHub-Profile-black.svg)](https://github.com/MouslyDiaw)
 
+### 👨‍💻 Auteurs
 
+<table>
+<tr>
+<td align="center">
+<a href="https://www.linkedin.com/in/mohamadi-bassirou-compaore-04a712300">
+<img src="https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
+</a><br/>
+<strong>Compaoré BASSIROU</strong><br/>
+📧 mohamadibassirou@gmail.com
 
-**Dernière mise à jour** : 2026
+</td>
+<td align="center">
+<a href="https://www.linkedin.com/in/samba-dieng-b13650247">
+<img src="https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
+</a><br/>
+<strong>Samba DIENG</strong><br/>
+📧 sambadieng122003@gmail.com
+</td>
+<td align="center">
+<a href="https://www.linkedin.com/in/djerake%C3%AF-mistalengar-086b3a21b/">
+<img src="https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
+</a><br/>
+<strong>Yves Mistalengar DJERAKEI</strong><br/>
+📧 yvesdjerake@gmail.com
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="https://www.linkedin.com/in/dyvana-seunkam-8aa93b340">
+<img src="https://img.shields.io/badge/LinkedIn-Profile-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
+</a><br/>
+<strong>Divana KERENCIA</strong><br/>
+📧 dyvanaseukam@gmail.com
+</td>
+<td align="center">
+<strong>Ange Emilson RAYAN</strong><br/>
+📧 rayanemil20@gmail.com
+</td>
+</tr>
+</table>
+
+---
+
+## 📖 Références
+
+### 📚 Dataset
+
+- [House Prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques) - Kaggle Competition
+- [Dataset Description](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data) - Documentation complète
+
+### 🔗 Technologies
+
+- [Scikit-learn](https://scikit-learn.org/) - Machine Learning
+- [Pandas](https://pandas.pydata.org/) - Manipulation de données
+- [Streamlit](https://streamlit.io/) - Dashboard interactif
+- [MLflow](https://mlflow.org/) - Gestion d'expériences ML
+- [XGBoost](https://xgboost.readthedocs.io/) - Gradient Boosting
+- [LightGBM](https://lightgbm.readthedocs.io/) - Gradient Boosting optimisé
+
+---
+
+<div align="center">
+
+### 📅 Dernière mise à jour : 2026
+
+**École nationale de la Statistique et de l'Analyse économique Pierre NDIAYE (ENSAE)**
+
+*Ce projet est réalisé dans le cadre académique.*
+
+[⬆ Retour en haut](#-table-des-matières)
+
+</div>
