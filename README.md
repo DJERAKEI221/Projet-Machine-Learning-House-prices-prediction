@@ -197,7 +197,7 @@ python scripts/run_mlflow_ui.py
 
 ```
 pytest tests/ -v --cov=src --cov-report=html
-=======
+
 ├── docs/                                # Documentation détaillée
 │
 ├── tests/                               # Tests unitaires
@@ -205,7 +205,6 @@ pytest tests/ -v --cov=src --cov-report=html
 ├── requirements.txt                     # Dépendances principales
 ├── requirements_api.txt                 # Dépendances
 └── README.md                            # Ce fichier
->>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
 ```
 
 ---
@@ -254,7 +253,7 @@ pytest tests/ -v --cov=src --cov-report=html
 - Optimisation des hyperparamètres avec GridSearchCV
 - Sélection du meilleur modèle
 - Sauvegarde du modèle final et des métadonnées
->>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
+
 
 ---
 
@@ -362,7 +361,6 @@ Ce projet est réalisé dans le cadre académique.
 
 **École nationale de la Statistique et de l'Analyse économique Pierre NDIAYE (ENSAE)**
 
-*Ce projet est réalisé dans le cadre académique.*
 
 [⬆ Retour en haut](#-table-des-matières)
 
