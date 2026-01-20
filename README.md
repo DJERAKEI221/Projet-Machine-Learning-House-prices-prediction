@@ -344,15 +344,6 @@ pytest tests/ -v --cov=src --cov-report=html
 - [XGBoost](https://xgboost.readthedocs.io/) - Gradient Boosting
 - [LightGBM](https://lightgbm.readthedocs.io/) - Gradient Boosting optimisé
   
-**Auteurs :**
-- Compaoré BASSIROU : mohamadibassirou@gmail.com  [LinkedIn](https://www.linkedin.com/in/mohamadi-bassirou-compaore-04a712300)
-- Samba DIENG : sambadieng122003@gmail.com | [LinkedIn](https://www.linkedin.com/in/samba-dieng-b13650247)
-- Yves Mistalengar DJERAKEI : yvesdjerake@gmail.com | [LinkedIn](https://www.linkedin.com/in/djerake%C3%AF-mistalengar-086b3a21b/)
-- Divana KERENCIA : dyvanaseukam@gmail.com | [LinkedIn](https://www.linkedin.com/in/dyvana-seunkam-8aa93b340)
-- Ange Emilson RAYAN : rayanemil20@gmail.com
-
-Ce projet est réalisé dans le cadre académique.
-
 ---
 
 <div align="center">
