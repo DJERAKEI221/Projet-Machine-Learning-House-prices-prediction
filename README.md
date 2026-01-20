@@ -26,7 +26,6 @@
 - [Modèles et Performance](#-modèles-et-performance)
 - [Équipe](#-équipe)
 - [Références](#-références)
-=======
 - **Prédiction précise** : Développer un modèle performant pour prédire le prix de vente des maisons
 - **Analyse approfondie** : Identifier les variables les plus importantes pour la prédiction
 - **Pipeline complet** : Mettre en place un workflow de bout en bout, de l'exploration à la déploiement
