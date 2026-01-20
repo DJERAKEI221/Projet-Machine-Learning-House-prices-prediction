@@ -15,6 +15,7 @@
 
 </div>
 
+<<<<<<< HEAD
 ## 📋 Table des Matières
 
 - [À Propos](#-à-propos)
@@ -26,6 +27,12 @@
 - [Modèles et Performance](#-modèles-et-performance)
 - [Équipe](#-équipe)
 - [Références](#-références)
+=======
+- **Prédiction précise** : Développer un modèle performant pour prédire le prix de vente des maisons
+- **Analyse approfondie** : Identifier les variables les plus importantes pour la prédiction
+- **Pipeline complet** : Mettre en place un workflow de bout en bout, de l'exploration à la déploiement
+- **MLflow** : Intégrer MLflow pour le suivi des expériences, tests unitaires et CI/CD
+>>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
 
 ---
 
@@ -73,10 +80,21 @@ Le dataset provient de la compétition Kaggle **"House Prices: Advanced Regressi
 ```
 ProjetMachine-Learning-House-prices-prediction/
 │
+<<<<<<< HEAD
 ├── 📁 data/                    # Gestion des données
 │   ├── raw/                    # Données brutes
 │   ├── interim/                # Données intermédiaires
 │   └── processed/              # Données nettoyées
+=======
+├── notebooks/
+│   ├── exploration_base_donnees.ipynb    # Exploration et analyse des données
+│   ├── traitement.ipynb                   # Nettoyage et préparation des données
+│   ├── feat_engeneering_modeling.ipynb         # Feature engineering et modélisation
+│   ├── data/processed/                   # Exports intermédiaires
+│   └── output/                          # Modèles et préprocesseurs sauvegardés
+│       ├── models/                       # Modèle final (model_final.joblib)
+│       └── preprocess/                   # Préprocesseurs sauvegardés
+>>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
 │
 ├── 📁 notebooks/              # Notebooks d'analyse
 │   ├── exploration_base_donnees.ipynb
@@ -96,6 +114,7 @@ ProjetMachine-Learning-House-prices-prediction/
 │   ├── app.py
 │   └── assets/
 │
+<<<<<<< HEAD
 ├── 📁 tests/                  # Tests unitaires
 ├── 📁 docs/                   # Documentation détaillée
 └── 📁 mlruns/                 # Stockage MLflow
@@ -188,6 +207,15 @@ python scripts/run_mlflow_ui.py
 
 ```
 pytest tests/ -v --cov=src --cov-report=html
+=======
+├── docs/                                # Documentation détaillée
+│
+├── tests/                               # Tests unitaires
+├── mlruns/                              # Stockage MLflow (expériences)
+├── requirements.txt                     # Dépendances principales
+├── requirements_api.txt                 # Dépendances
+└── README.md                            # Ce fichier
+>>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
 ```
 
 ---
@@ -210,9 +238,34 @@ pytest tests/ -v --cov=src --cov-report=html
 
 ### Feature Engineering
 
+<<<<<<< HEAD
 - **Nouvelles features** : âges (HouseAge, RemodAge, GarageAge), surfaces totales (TotalSF, TotalPorchSF), équipements (TotalBath)
 - **Encodage** : One-Hot Encoding (nominales), Ordinal Encoding (ordinales)
 - **Transformation** : Transformation logarithmique pour variables asymétriques
+=======
+- Analyse descriptive complète
+- Détection et traitement des valeurs manquantes structurelles
+- Identification des outliers
+- Analyse de corrélation pour variables quantitatives
+- Tests ANOVA pour variables qualitatives
+- Traduction et mapping des variables
+
+### 3. Feature Engineering et Modélisation (`feat_engeneering_modeling.ipynb`)
+
+- Création de nouvelles features
+- Encodage des variables catégorielles (One-Hot, Ordinal)
+- Transformation des variables asymétriques (log, Box-Cox)
+- Transformation logarithmique de la variable cible (SalePrice)
+- Entraînement et comparaison de plusieurs modèles :
+  - Ridge, Lasso, ElasticNet
+  - Random Forest
+  - Gradient Boosting
+  - LightGBM
+  - XGBoost
+- Optimisation des hyperparamètres avec GridSearchCV
+- Sélection du meilleur modèle
+- Sauvegarde du modèle final et des métadonnées
+>>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
 
 ---
 
@@ -296,12 +349,23 @@ pytest tests/ -v --cov=src --cov-report=html
 
 ### 🔗 Technologies
 
+<<<<<<< HEAD
 - [Scikit-learn](https://scikit-learn.org/) - Machine Learning
 - [Pandas](https://pandas.pydata.org/) - Manipulation de données
 - [Streamlit](https://streamlit.io/) - Dashboard interactif
 - [MLflow](https://mlflow.org/) - Gestion d'expériences ML
 - [XGBoost](https://xgboost.readthedocs.io/) - Gradient Boosting
 - [LightGBM](https://lightgbm.readthedocs.io/) - Gradient Boosting optimisé
+=======
+**Auteurs :**
+- Compaoré BASSIROU : mohamadibassirou@gmail.com  [LinkedIn](https://www.linkedin.com/in/mohamadi-bassirou-compaore-04a712300)
+- Samba DIENG : sambadieng122003@gmail.com | [LinkedIn](https://www.linkedin.com/in/samba-dieng-b13650247)
+- Yves Mistalengar DJERAKEI : yvesdjerake@gmail.com | [LinkedIn](https://www.linkedin.com/in/djerake%C3%AF-mistalengar-086b3a21b/)
+- Divana KERENCIA : dyvanaseukam@gmail.com | [LinkedIn](https://www.linkedin.com/in/dyvana-seunkam-8aa93b340)
+- Ange Emilson RAYAN : rayanemil20@gmail.com
+
+Ce projet est réalisé dans le cadre académique.
+>>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
 
 ---
 
