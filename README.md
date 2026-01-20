@@ -172,7 +172,7 @@ pip install -r requirements.txt
 
 1. **Exploration** : `notebooks/exploration_base_donnees.ipynb`
 2. **Traitement** : `notebooks/traitement.ipynb`
-3. **Modélisation** : `notebooks/feat_engeneering_modeling.ipynb`
+3. **Modélisation** : `notebooks/feat_engenering_modelisation.ipynb`
 
 ### Dashboard Interactif
 
@@ -238,7 +238,7 @@ pytest tests/ -v --cov=src --cov-report=html
 - Tests ANOVA pour variables qualitatives
 - Traduction et mapping des variables
 
-### 3. Feature Engineering et Modélisation (`feat_engeneering_modeling.ipynb`)
+### 3. Feature Engineering et Modélisation (`feat_engenering_modelisation.ipynb`)
 
 - Création de nouvelles features
 - Encodage des variables catégorielles (One-Hot, Ordinal)
