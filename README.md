@@ -31,7 +31,6 @@
 - **Analyse approfondie** : Identifier les variables les plus importantes pour la prédiction
 - **Pipeline complet** : Mettre en place un workflow de bout en bout, de l'exploration à la déploiement
 - **MLflow** : Intégrer MLflow pour le suivi des expériences, tests unitaires et CI/CD
->>>>>>> 80d9fb02c939bad4c1e39e4ded0542168aef24d0
 
 ---
 
@@ -342,7 +341,7 @@ pytest tests/ -v --cov=src --cov-report=html
 - [Dataset Description](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data) - Documentation complète
 
 ### 🔗 Technologies et Documentation
-- [https://www.canva.com/design/DAFPHR8GPhw/1YOoExutK-dY2TmVuYQ6mw/edit) - Cours machine learning I ENSAE
+- [Cours machine learning I ENSAE-ISE2](https://www.canva.com/design/DAFPHR8GPhw/1YOoExutK-dY2TmVuYQ6mw/edit)
 - [Scikit-learn](https://scikit-learn.org/) - Machine Learning
 - [Pandas](https://pandas.pydata.org/) - Manipulation de données
 - [Streamlit](https://streamlit.io/) - Dashboard interactif
